@@ -22,7 +22,7 @@
             <!-- Navigation -->
             <nav class="navigation d-flex flex-column text-center navbar navbar-light hide-scrollbar">
                 <!-- Brand -->
-                <a href="index.html" title="Messenger" class="d-none d-xl-block mb-6">
+                <a href="{{route('dashboard')}}" title="Messenger" class="d-none d-xl-block mb-6">
                     <svg version="1.1" width="46px" height="46px" fill="currentColor" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 46 46" enable-background="new 0 0 46 46" xml:space="preserve">
                         <polygon opacity="0.7" points="45,11 36,11 35.5,1 "/>
                         <polygon points="35.5,1 25.4,14.1 39,21 "/>

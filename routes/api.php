@@ -18,6 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/upload-audio', [AudioController::class,'uploadAudio'])->name('upload');
-Route::post('get-answer', [AudioController::class,'getAnswer'])->name('get-answer');
+// Route::post('/upload-audio', [AudioController::class,'uploadAudio'])->name('upload');
+// Route::post('get-answer', [AudioController::class,'getAnswer'])->name('get-answer');
 

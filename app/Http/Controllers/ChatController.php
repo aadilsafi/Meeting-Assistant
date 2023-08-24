@@ -13,7 +13,7 @@ class ChatController extends Controller
     public function index()
     {
         $selected_chat = null;
-        $chats = Chat::where('user_id',1)->get()->sortByDesc('created_at');
+        $chats = Chat::where('user_id',auth()->id())->get()->sortByDesc('created_at');
         return view('chat-direct',compact('chats','selected_chat'));
     }
 
@@ -38,8 +38,11 @@ class ChatController extends Controller
      */
     public function show($id)
     {
-        $selected_chat = Chat::find($id);
-        $chats = Chat::where('user_id',1)->get()->sortByDesc('created_at');
+        $selected_chat = Chat::where('id',$id)->where('user_id',auth()->id())->first();
+        if(!$selected_chat){
+            return redirect()->route('chat.index');
+        }
+        $chats = Chat::where('user_id',auth()->id())->get()->sortByDesc('created_at');
         return view('chat-direct',compact('selected_chat','chats'));
     }
 

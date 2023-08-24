@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -44,7 +45,7 @@ class AudioController extends Controller
                 }
                 if ($request->chat_id == "null" || $request->chat_id == null) {
                     $chat = Chat::create([
-                        'user_id' => 1,
+                        'user_id' => auth()->id(),
                         'message' => $text_result['text'],
                     ]);
                 } else {
@@ -64,13 +65,12 @@ class AudioController extends Controller
 
     public function getAnswer(Request $request)//$text, $chat
     {
-
         $text = $request->text;
 
         $chat = Chat::find($request->chat_id);
         if($chat == null){
             $chat = Chat::create([
-                'user_id' => 1,
+                'user_id' => auth()->id(),
                 'message' => $text,
             ]);
         }
@@ -120,7 +120,7 @@ class AudioController extends Controller
 
         if (false) {
             $chat = Chat::create([
-                'user_id' => 1,
+                'user_id' => auth()->id(),
                 'message' => $text_result,
             ]);
             // $chat->contexts()->create([
