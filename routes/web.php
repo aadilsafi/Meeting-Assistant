@@ -32,7 +32,6 @@ Route::middleware('auth')->group(function () {
     Route::get('record', [AudioController::class,'index']);
     Route::post('/upload-audio', [AudioController::class,'uploadAudio'])->name('upload');
     Route::post('get-answer', [AudioController::class,'getAnswer'])->name('get-answer');
-    // Route::get('get-answer/{text}', [AudioController::class,'getAnswer'])->name('user');
 });
 
 require __DIR__.'/auth.php';

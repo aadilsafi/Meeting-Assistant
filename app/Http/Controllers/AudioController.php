@@ -109,33 +109,4 @@ class AudioController extends Controller
         ]);
         return response()->json(['text' => $result['choices'][0]['message']['content'],'chat_id' =>$chat->id],200);
     }
-
-    public function test()
-    {
-
-
-        $text_result = "what is malinga";
-
-
-
-        if (false) {
-            $chat = Chat::create([
-                'user_id' => auth()->id(),
-                'message' => $text_result,
-            ]);
-            // $chat->contexts()->create([
-            // 'user_response' => $text_result['text'],
-            // 'asisstant_response' => $result,
-            // ]);
-        } else {
-            $chat = Chat::find(1);
-            // $chat->contexts()->create([
-            //     'user_response' => $text_result['text'],
-            //     'asisstant_response' => $result,
-            // ]);
-        }
-
-        $result = $this->getAnswer($text_result, $chat);
-        return response()->json(["result" => $result, "chat_id" => $chat->id]);
-    }
 }
