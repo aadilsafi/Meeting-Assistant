@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'upload',
-        'get-answer'
+        'get-answer',
+        'upload-audio'
     ];
 }

@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, shrink-to-fit=no, viewport-fit=cover">
         <meta name="color-scheme" content="light dark">
 
-        <title>Messenger - 2.2.0</title>
+        <title>{{env('APP_NAME')}}</title>
 
         <!-- Favicon -->
         <link rel="shortcut icon" href="{{asset('assets/img/favicon/favicon.ico')}}" type="image/x-icon">
@@ -190,16 +190,16 @@
                                         <div class="input-group">
                                             <textarea class="form-control px-0" id="text-input" placeholder="Type your message..." rows="1" data-emoji-input="" data-autosize="true"></textarea>
 
-                                            <a href="#" class="input-group-text text-body pe-0" data-emoji-btn="">
-                                                {{-- <span class="icon icon-lg">
+                                            <a href="#" class="input-group-text text-body pe-0 d-none" data-emoji-btn="">
+                                                <span class="icon icon-lg">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smile"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-                                                </span> --}}
+                                                </span>
                                             </a>
                                         </div>
                                     </div>
 
                                     <div class="col-auto">
-                                        <button type="button" class="btn btn-icon btn-primary rounded-circle ms-5" onclick="sendText(this)">
+                                        <button type="button" id='text-button' class="btn btn-icon btn-primary rounded-circle ms-5" onclick="sendText()">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                                         </button>
                                         <button class="btn btn-icon btn-primary rounded-circle ms-5" type=button onclick="toggleListening()" id="mic-button">
@@ -237,24 +237,16 @@
         let speechEvents;
         let mediaStream;
         let selectedDeviceId;
+        let stream;
+
 
 
         async function startRecording() {
 
             recordedChunks = [];
-            let stream;
-            if (selectedDeviceId) {
                 stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: selectedDeviceId } });
-                console.log(stream);
                 // return;
-            }
-            else{
-            //     const stream = await navigator.mediaDevices.getUserMedia({
-            //     audio: true
-            // });
-                alert('please select a microphone');
-                return
-            }
+
 
             mediaRecorder = new MediaRecorder(stream);
 
@@ -269,9 +261,9 @@
                     type: "audio/wav"
                 });
                 recordedChunks = [];
-                if(user_input){
+                // if(user_input){
                 sendAudioToBackend(audioBlob);
-                }
+                // }
 
 
             };
@@ -395,15 +387,16 @@
             isNewChat = true;
             inProgress = false;
             recordedChunks = [];
+
             if (mediaRecorder) {
                 mediaRecorder.stop();
             }
             if(speechEvents){
                 speechEvents.stop();
             }
-            if (mediaStream) {
-                mediaStream.getTracks().forEach(track => track.stop());
-                mediaStream = null;
+                     if(stream){
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
             }
             user_input = false;
         }
@@ -464,8 +457,14 @@
             isStart = !isStart;
             let mic_icon = document.getElementById('mic-button');
             if(isStart){
-                mic_icon.classList.add('active')
-                startListening();
+                if(selectedDeviceId){
+                    mic_icon.classList.add('active')
+
+                    startListening();
+                }else{
+                    isStart = false
+                    alert('Please select a microphone first')
+                }
             }else{
                 mic_icon.classList.remove('active')
                 stopListening();
@@ -492,7 +491,6 @@
             document.getElementById('card-list').innerHTML = temp
         }
         document.addEventListener("DOMContentLoaded", async function() {
-              const stream = navigator.mediaDevices.getUserMedia({audio: true})
   const microphoneSelect = document.getElementById("microphoneSelect");
 
   try {
@@ -517,12 +515,22 @@
   microphoneSelect.addEventListener("change", function() {
     selectedDeviceId = microphoneSelect.value;
     stopListening();
-    startListening();
+    if(isStart){
+        startListening();
+    }
   });
 });
+        const textArea = document.getElementById('text-input');
+        // Add an event listener to the text area for the "keydown" event
+        textArea.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent the default behavior of the "Enter" key (e.g., line break)
+            document.getElementById('text-button').click(); // Simulate a click on the button
+        }
+        });
     </script>
     <script src="{{asset('assets/js/vendor.js')}}"></script>
-        <script src="{{asset('assets/js/template.js')}}"></script>
+    <script src="{{asset('assets/js/template.js')}}"></script>
     </body>
 </html>
 <style>
